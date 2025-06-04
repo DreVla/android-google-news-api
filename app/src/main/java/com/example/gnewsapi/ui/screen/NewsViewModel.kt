@@ -1,17 +1,29 @@
-package com.example.gnewsapi
+package com.example.gnewsapi.ui.screen
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.example.gnewsapi.model.ArticleDTO
-import com.example.gnewsapi.networking.NewsRepository
+import com.example.gnewsapi.BuildConfig
+import com.example.gnewsapi.data.dto.toDomain
+import com.example.gnewsapi.data.repository.NewsRepository
+import com.example.gnewsapi.model.Article
 import kotlinx.coroutines.launch
 
-class NewsViewModel(private val newsRepository: NewsRepository): ViewModel() {
-    private val _articles = MutableLiveData<List<ArticleDTO>>()
-    val articles: LiveData<List<ArticleDTO>> = _articles
+class NewsViewModel(private val newsRepository: NewsRepository) : ViewModel() {
+    private val _articles = MutableLiveData<List<Article>>()
+    val articles: LiveData<List<Article>> = _articles
+
+    // Implemented simple navigation, for now.
+    // TODO Consider implementing navigation with Navigation Compose
+    private val _selectedArticle = MutableLiveData<Article?>()
+    val selectedArticle: LiveData<Article?> = _selectedArticle
+
+    var isLoading by mutableStateOf(true)
 
     fun getTopHeadlines(
         country: String = "us",
@@ -21,7 +33,7 @@ class NewsViewModel(private val newsRepository: NewsRepository): ViewModel() {
         pageSize: Int = 21,
         page: Int = 0,
         apiKey: String = BuildConfig.NEWS_API_KEY,
-        ) {
+    ) {
         viewModelScope.launch {
             val response = newsRepository.getTopHeadlines(
                 country = country,
@@ -32,9 +44,17 @@ class NewsViewModel(private val newsRepository: NewsRepository): ViewModel() {
                 page = page,
                 apiKey = apiKey
             )
-            _articles.value = response.articles
+            _articles.value = response.articles.map { it.toDomain() }
+            isLoading = false
         }
+    }
 
+    fun setSelectedArticle(article: Article) {
+        _selectedArticle.value = article
+    }
+
+    fun clearSelectedArticle() {
+        _selectedArticle.value = null
     }
 }
 
@@ -48,7 +68,7 @@ class NewsViewModel(private val newsRepository: NewsRepository): ViewModel() {
  */
 class NewsViewModelFactory(private val repository: NewsRepository) : ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
-    override fun <T: ViewModel> create (modelClass: Class<T>): T {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return NewsViewModel(repository) as T
     }
 }

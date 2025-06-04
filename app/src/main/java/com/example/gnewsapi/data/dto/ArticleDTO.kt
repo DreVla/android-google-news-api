@@ -1,4 +1,6 @@
-package com.example.gnewsapi.model
+package com.example.gnewsapi.data.dto
+
+import com.example.gnewsapi.model.Article
 
 /**
  * Created using the example response endpoint from the Google News Api and the help of online
@@ -25,6 +27,18 @@ data class ArticleDTO(
     val publishedAt: String,
     val content: String,
 )
+
+fun ArticleDTO.toDomain(): Article {
+    return Article(
+        sourceName = if (source.name.isNullOrBlank()) "Unknown Source" else source.name,
+        author = if (author.isNullOrBlank()) "Unknown Author" else author,
+        title = if (title.isNullOrBlank()) "Missing Title" else title,
+        description = if (description.isNullOrBlank()) "Missing Description" else description,
+        urlToImage = if (urlToImage.isNullOrBlank()) "" else urlToImage,
+        url = if (url.isNullOrBlank()) "" else url,
+        content = if (content.isNullOrBlank()) "Missing Content" else content,
+    )
+}
 
 /**
  * Source object from the Google News Api

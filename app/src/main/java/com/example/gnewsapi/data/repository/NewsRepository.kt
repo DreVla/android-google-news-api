@@ -1,6 +1,6 @@
-package com.example.gnewsapi.networking
+package com.example.gnewsapi.data.repository
 
-import com.example.gnewsapi.model.NewsResponse
+import com.example.gnewsapi.data.api.NewsResponse
 
 interface NewsRepository {
 
