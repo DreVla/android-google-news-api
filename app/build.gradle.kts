@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -16,6 +18,22 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+
+        // Code to retrieve hidden API key. There are multiple ways to do this, but this is my favorite.
+        // source: https://gist.github.com/MAshhal/636be4a3292f353f21547d02fdaef096
+        // Read the local.properties file to get the hidden API key
+        val localPropertiesFile = rootProject.file("local.properties")
+        val properties = Properties()
+        properties.load(localPropertiesFile.inputStream())
+
+        // Return a help message in case the API key is missing
+        val apiKey = properties.getProperty("NEWS_API_KEY")
+            ?: "MISSING API KEY, PLEASE ADD TO LOCAL.PROPERTIES AS SUCH: NEWS_API_KEY = \"YOUR_API_KEY\""
+
+        // For accessing the property using BuildConfig
+        buildConfigField(type = "String", name = "NEWS_API_KEY", value = apiKey)
+
     }
 
     buildTypes {
@@ -36,6 +54,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 
@@ -49,6 +68,7 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation(libs.androidx.runtime.livedata)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -56,4 +76,7 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
 }
