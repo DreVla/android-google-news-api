@@ -10,6 +10,7 @@ import kotlinx.serialization.Serializable
  * [source](https://developer.android.com/reference/androidx/navigation/NavType)
  */
 @Serializable
-data class TopArticlesRoute(val articles: List<Article>, val columns: Int)
+data class TopArticlesRoute(val columns: Int)
+
 @Serializable
 data class FullArticleRoute(val article: Article)

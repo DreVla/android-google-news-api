@@ -4,11 +4,10 @@ import android.content.res.Configuration
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.compose.rememberNavController
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.gnewsapi.data.api.NewsApiService
 import com.example.gnewsapi.data.api.RetrofitClient
 import com.example.gnewsapi.data.repository.NewsRepositoryImpl
@@ -29,12 +28,8 @@ class MainActivity : ComponentActivity() {
         val viewModelFactory = NewsViewModelFactory(repository)
         newsViewModel = ViewModelProvider(this, viewModelFactory)[NewsViewModel::class.java]
 
-        newsViewModel.getTopHeadlines()
-
         setContent {
-            val articles by newsViewModel.articles.observeAsState(emptyList())
-
-            val isLoading by newsViewModel.isLoading.observeAsState(initial = true)
+            val articles = newsViewModel.topHeadlinesFlow.collectAsLazyPagingItems()
 
             val configuration = LocalConfiguration.current
             val columns = when (configuration.orientation) {
@@ -49,7 +44,6 @@ class MainActivity : ComponentActivity() {
                     navController = navController,
                     articles = articles,
                     columns = columns,
-                    isLoading = isLoading,
                 )
             }
         }
