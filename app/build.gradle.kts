@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     kotlin("plugin.serialization")
+    id("com.google.protobuf")
 }
 
 android {
@@ -98,4 +99,29 @@ dependencies {
     // Paging
     implementation(libs.androidx.paging.runtime.ktx)
     implementation(libs.androidx.paging.compose)
+
+    // Protobuff
+    implementation(libs.protobuf.javalite)
+}
+
+/**
+ * Did not know about protobuf before, so I looked it up.
+ *
+ * [source](https://github.com/google/protobuf-gradle-plugin/tree/master)
+ * [source](https://protobuf.dev/programming-guides/editions/)
+ * [source](https://medium.com/@zekromvishwa56789/setting-up-protocol-buffers-in-an-android-project-8f7bad31981f)
+ */
+protobuf {
+    protoc {
+        artifact = "com.google.protobuf:protoc:3.25.5"
+    }
+    generateProtoTasks {
+        all().forEach { task ->
+            task.builtins {
+                create("java") {
+                    option("lite")
+                }
+            }
+        }
+    }
 }

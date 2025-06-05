@@ -73,6 +73,9 @@ fun NavigationHost(
                 onBackClick = {
                     navController.popBackStack()
                 },
+                onSaveClick = {
+                    // TODO: Implement save article to datastore
+                }
             )
         }
     }
