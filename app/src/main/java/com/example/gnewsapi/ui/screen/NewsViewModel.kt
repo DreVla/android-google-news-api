@@ -18,12 +18,8 @@ class NewsViewModel(private val newsRepository: NewsRepository) : ViewModel() {
     private val _articles = MutableLiveData<List<Article>>()
     val articles: LiveData<List<Article>> = _articles
 
-    // Implemented simple navigation, for now.
-    // TODO Consider implementing navigation with Navigation Compose
-    private val _selectedArticle = MutableLiveData<Article?>()
-    val selectedArticle: LiveData<Article?> = _selectedArticle
-
-    var isLoading by mutableStateOf(true)
+    private val _isLoading = MutableLiveData<Boolean>()
+    val isLoading: LiveData<Boolean> = _isLoading
 
     fun getTopHeadlines(
         country: String = "us",
@@ -45,16 +41,8 @@ class NewsViewModel(private val newsRepository: NewsRepository) : ViewModel() {
                 apiKey = apiKey
             )
             _articles.value = response.articles.map { it.toDomain() }
-            isLoading = false
+            _isLoading.value = false
         }
-    }
-
-    fun setSelectedArticle(article: Article) {
-        _selectedArticle.value = article
-    }
-
-    fun clearSelectedArticle() {
-        _selectedArticle.value = null
     }
 }
 

@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    kotlin("plugin.serialization")
 }
 
 android {
@@ -84,4 +85,13 @@ dependencies {
 
     implementation(libs.coil.compose)
     implementation(libs.coil.network.okhttp)
+
+    // I decided to go with navigation compose because I wanted the UI to be built using jetpack
+    // compose. I know fragments are not deprecated and are still widely used in Android, but I
+    // wanted to also experiment with navigation compose.
+    // source - https://developer.android.com/develop/ui/compose/navigation#kts
+    // Also, there is nav 3 in alpha right now, which I just found out about:
+    // https://developer.android.com/guide/navigation/navigation-3
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.kotlinx.serialization.json)
 }

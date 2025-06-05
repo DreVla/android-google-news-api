@@ -1,5 +1,8 @@
 package com.example.gnewsapi.model
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class Article(
     val sourceName: String,
     val author: String,
@@ -9,3 +12,4 @@ data class Article(
     val urlToImage: String,
     val content: String,
 )
+
