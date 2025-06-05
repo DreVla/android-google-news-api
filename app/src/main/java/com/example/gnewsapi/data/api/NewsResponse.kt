@@ -1,4 +1,6 @@
-package com.example.gnewsapi.model
+package com.example.gnewsapi.data.api
+
+import com.example.gnewsapi.data.dto.ArticleDTO
 
 /**
  * Created using the example response endpoint from the Google News Api and the help of online

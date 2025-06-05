@@ -1,22 +1,20 @@
 package com.example.gnewsapi
 
+import android.content.res.Configuration
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.lifecycle.ViewModelProvider
-import com.example.gnewsapi.networking.NewsApiService
-import com.example.gnewsapi.networking.NewsRepositoryImpl
-import com.example.gnewsapi.networking.RetrofitClient
+import androidx.navigation.compose.rememberNavController
+import com.example.gnewsapi.data.api.NewsApiService
+import com.example.gnewsapi.data.api.RetrofitClient
+import com.example.gnewsapi.data.repository.NewsRepositoryImpl
+import com.example.gnewsapi.ui.navigation.NavigationHost
+import com.example.gnewsapi.ui.screen.NewsViewModel
+import com.example.gnewsapi.ui.screen.NewsViewModelFactory
 import com.example.gnewsapi.ui.theme.GNewsApiTheme
 
 class MainActivity : ComponentActivity() {
@@ -25,7 +23,6 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
 
         val newsApiService = RetrofitClient.instance.create(NewsApiService::class.java)
         val repository = NewsRepositoryImpl(newsApiService)
@@ -35,34 +32,26 @@ class MainActivity : ComponentActivity() {
         newsViewModel.getTopHeadlines()
 
         setContent {
+            val articles by newsViewModel.articles.observeAsState(emptyList())
+
+            val isLoading by newsViewModel.isLoading.observeAsState(initial = true)
+
+            val configuration = LocalConfiguration.current
+            val columns = when (configuration.orientation) {
+                Configuration.ORIENTATION_LANDSCAPE -> 3
+                else -> 2
+            }
+
+            val navController = rememberNavController()
+
             GNewsApiTheme {
-                val articles by newsViewModel.articles.observeAsState(emptyList())
-                for (article in articles) {
-                    println("drevla: " + article.title)
-                }
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
+                NavigationHost(
+                    navController = navController,
+                    articles = articles,
+                    columns = columns,
+                    isLoading = isLoading,
+                )
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    GNewsApiTheme {
-        Greeting("Android")
     }
 }

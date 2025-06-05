@@ -1,6 +1,5 @@
-package com.example.gnewsapi.networking
+package com.example.gnewsapi.data.api
 
-import com.example.gnewsapi.model.NewsResponse
 import retrofit2.http.GET
 import retrofit2.http.Query
 

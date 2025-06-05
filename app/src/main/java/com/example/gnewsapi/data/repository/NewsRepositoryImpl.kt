@@ -1,6 +1,7 @@
-package com.example.gnewsapi.networking
+package com.example.gnewsapi.data.repository
 
-import com.example.gnewsapi.model.NewsResponse
+import com.example.gnewsapi.data.api.NewsApiService
+import com.example.gnewsapi.data.api.NewsResponse
 
 /**
  * Repository design pattern used to abstract the data source from the rest of the app.
