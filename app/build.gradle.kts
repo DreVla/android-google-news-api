@@ -94,4 +94,8 @@ dependencies {
     // https://developer.android.com/guide/navigation/navigation-3
     implementation(libs.androidx.navigation.compose)
     implementation(libs.kotlinx.serialization.json)
+
+    // Paging
+    implementation(libs.androidx.paging.runtime.ktx)
+    implementation(libs.androidx.paging.compose)
 }
