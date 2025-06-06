@@ -1,6 +1,6 @@
 package com.example.gnewsapi.ui.screen.fullarticle
 
-import androidx.activity.compose.BackHandler
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -27,7 +26,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
-import coil3.compose.AsyncImage
 import coil3.compose.SubcomposeAsyncImage
 import com.example.gnewsapi.R
 import com.example.gnewsapi.model.Article
@@ -35,12 +33,10 @@ import com.example.gnewsapi.model.Article
 @Composable
 fun FullArticleScreen(
     article: Article,
+    isSaved: Boolean,
     onBackClick: () -> Unit,
-//    onSaveClick: () -> Unit,
+    onSaveClick: () -> Unit,
 ) {
-    BackHandler {
-        onBackClick()
-    }
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background,
@@ -48,25 +44,33 @@ fun FullArticleScreen(
         Column(
             modifier = Modifier
                 .verticalScroll(rememberScrollState()),
-        )
-        {
-            Row (
+        ) {
+            Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
             ) {
                 Icon(
                     modifier = Modifier
                         .padding(16.dp)
-                        .clickable { onBackClick() },
+                        .clickable {
+                            onBackClick()
+                        },
                     imageVector = androidx.compose.material.icons.Icons.AutoMirrored.Filled.ArrowBack,
                     contentDescription = stringResource(R.string.full_article_back_button_content_description),
                     tint = MaterialTheme.colorScheme.primary,
                 )
                 Icon(
                     modifier = Modifier
-                        .padding(16.dp),
-//                        .clickable { onSaveClick() },
-                    painter = painterResource(id = R.drawable.outline_bookmark_add_24),
+                        .padding(16.dp)
+                        .clickable {
+                            onSaveClick()
+                        },
+                    painter = painterResource(
+                        id = if (isSaved)
+                            R.drawable.baseline_bookmark_remove_24
+                        else
+                            R.drawable.outline_bookmark_add_24
+                    ),
                     contentDescription = stringResource(R.string.full_article_save_button_content_description),
                     tint = MaterialTheme.colorScheme.primary,
                 )
@@ -136,7 +140,8 @@ fun FullArticleScreenPreview() {
             urlToImage = "urlToImage",
             content = stringResource(R.string.lorem_ipsum),
         ),
+        isSaved = true,
         onBackClick = {},
-//        onSaveClick = {},
+        onSaveClick = {},
     )
 }

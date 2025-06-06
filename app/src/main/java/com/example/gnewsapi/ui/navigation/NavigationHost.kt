@@ -3,12 +3,14 @@ package com.example.gnewsapi.ui.navigation
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import androidx.paging.compose.LazyPagingItems
 import com.example.gnewsapi.model.Article
+import com.example.gnewsapi.ui.screen.components.LoadingOverlay
 import com.example.gnewsapi.ui.screen.fullarticle.FullArticleScreen
 import com.example.gnewsapi.ui.screen.toparticles.TopArticlesScreen
 import kotlin.reflect.typeOf
@@ -18,6 +20,11 @@ fun NavigationHost(
     navController: NavHostController,
     articles: LazyPagingItems<Article>,
     columns: Int,
+    isConnected: Boolean,
+    isLoading: Boolean,
+    isSaved: Boolean,
+    onCheckIfSaved: (Article) -> Unit,
+    onSaveArticle: (Article) -> Unit,
 ) {
     NavHost(
         navController = navController,
@@ -50,17 +57,23 @@ fun NavigationHost(
         },
     ) {
         composable<TopArticlesRoute> {
-            TopArticlesScreen(
-                articles = articles,
-                columns = columns,
-                onArticleClick = { article ->
-                    navController.navigate(
-                        route = FullArticleRoute(
-                            article = article,
-                        ),
-                    )
-                }
-            )
+            LoadingOverlay(
+                isLoading = isLoading,
+            ) {
+                TopArticlesScreen(
+                    articles = articles,
+                    columns = columns,
+                    isConnected = isConnected,
+                    noSavedArticles = articles.itemCount == 0,
+                    onArticleClick = { article ->
+                        navController.navigate(
+                            route = FullArticleRoute(
+                                article = article,
+                            ),
+                        )
+                    }
+                )
+            }
         }
         composable<FullArticleRoute>(
             typeMap = mapOf(
@@ -68,10 +81,19 @@ fun NavigationHost(
             ),
         ) {
             val args = it.toRoute<FullArticleRoute>()
+
+            LaunchedEffect(args.article) {
+                onCheckIfSaved(args.article)
+            }
+
             FullArticleScreen(
                 article = args.article,
+                isSaved = isSaved,
                 onBackClick = {
                     navController.popBackStack()
+                },
+                onSaveClick = {
+                    onSaveArticle(args.article)
                 },
             )
         }

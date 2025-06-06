@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -17,7 +18,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
-import coil3.compose.AsyncImage
+import coil3.compose.SubcomposeAsyncImage
 import com.example.gnewsapi.R
 import com.example.gnewsapi.model.Article
 import com.example.gnewsapi.ui.theme.GNewsApiTheme
@@ -39,13 +40,16 @@ fun NewsCard(
         elevation = CardDefaults.cardElevation(4.dp),
     ) {
         Column {
-            AsyncImage(
+            SubcomposeAsyncImage(
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(1f),
                 model = article.urlToImage,
                 contentDescription = stringResource(R.string.full_article_image_button_content_description),
                 contentScale = androidx.compose.ui.layout.ContentScale.Crop,
+                loading = {
+                    CircularProgressIndicator()
+                }
             )
 
             Column(
@@ -90,13 +94,13 @@ fun NewsCardPreview() {
     GNewsApiTheme {
         NewsCard(
             article = Article(
-                sourceName = "test source name",
-                author = "test author",
-                title = "test title",
-                description = "test description",
+                sourceName = stringResource(R.string.lorem_ipsum),
+                author = stringResource(R.string.lorem_ipsum),
+                title = stringResource(R.string.lorem_ipsum),
+                description = stringResource(R.string.lorem_ipsum),
                 url = "test url",
                 urlToImage = "test url to image",
-                content = "test content",
+                content = stringResource(R.string.lorem_ipsum),
             ),
             modifier = Modifier,
             onClick = {},
