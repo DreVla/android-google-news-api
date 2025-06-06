@@ -1,5 +1,6 @@
 package com.example.gnewsapi.ui.screen
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -8,6 +9,8 @@ import androidx.paging.PagingConfig
 import androidx.paging.cachedIn
 import com.example.gnewsapi.data.pagingsource.TopHeadlinesPagingSource
 import com.example.gnewsapi.data.repository.NewsRepository
+import com.example.gnewsapi.model.Article
+import com.example.gnewsapi.model.toProtobuf
 
 private const val TOP_HEADLINES_INITIAL_PAGE_SIZE = 21
 private const val TOP_HEADLINES_PAGE_SIZE = 21
@@ -23,6 +26,11 @@ class NewsViewModel(private val newsRepository: NewsRepository) : ViewModel() {
         ),
         pagingSourceFactory = { TopHeadlinesPagingSource(newsRepository) }
     ).flow.cachedIn(viewModelScope)
+
+    fun saveArticle(article: Article) {
+        val protobufArticle = article.toProtobuf()
+        Log.d("drevla", "saveArticle: $protobufArticle")
+    }
 }
 
 /**

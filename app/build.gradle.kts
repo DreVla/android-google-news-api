@@ -110,6 +110,7 @@ dependencies {
  * [source](https://github.com/google/protobuf-gradle-plugin/tree/master)
  * [source](https://protobuf.dev/programming-guides/editions/)
  * [source](https://medium.com/@zekromvishwa56789/setting-up-protocol-buffers-in-an-android-project-8f7bad31981f)
+ * [source](https://developer.android.com/codelabs/android-proto-datastore#4)
  */
 protobuf {
     protoc {

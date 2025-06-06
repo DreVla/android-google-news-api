@@ -1,6 +1,5 @@
 package com.example.gnewsapi.ui.screen.fullarticle
 
-import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -30,7 +29,6 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.SubcomposeAsyncImage
 import com.example.gnewsapi.R
 import com.example.gnewsapi.model.Article
-import com.example.gnewsapi.model.toProtobuf
 
 @Composable
 fun FullArticleScreen(
@@ -38,9 +36,6 @@ fun FullArticleScreen(
     onBackClick: () -> Unit,
     onSaveClick: () -> Unit,
 ) {
-    BackHandler {
-        onBackClick()
-    }
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background,
@@ -48,8 +43,7 @@ fun FullArticleScreen(
         Column(
             modifier = Modifier
                 .verticalScroll(rememberScrollState()),
-        )
-        {
+        ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -57,7 +51,9 @@ fun FullArticleScreen(
                 Icon(
                     modifier = Modifier
                         .padding(16.dp)
-                        .clickable { onBackClick() },
+                        .clickable {
+                            onBackClick()
+                        },
                     imageVector = androidx.compose.material.icons.Icons.AutoMirrored.Filled.ArrowBack,
                     contentDescription = stringResource(R.string.full_article_back_button_content_description),
                     tint = MaterialTheme.colorScheme.primary,
@@ -66,8 +62,6 @@ fun FullArticleScreen(
                     modifier = Modifier
                         .padding(16.dp)
                         .clickable {
-                            val protobufArticle = article.toProtobuf()
-                            Log.d("drevla", "FullArticleScreen: $protobufArticle")
                             onSaveClick()
                         },
                     painter = painterResource(id = R.drawable.outline_bookmark_add_24),

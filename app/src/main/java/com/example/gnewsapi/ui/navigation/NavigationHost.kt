@@ -18,6 +18,7 @@ fun NavigationHost(
     navController: NavHostController,
     articles: LazyPagingItems<Article>,
     columns: Int,
+    onSaveArticle: (Article) -> Unit,
 ) {
     NavHost(
         navController = navController,
@@ -74,8 +75,8 @@ fun NavigationHost(
                     navController.popBackStack()
                 },
                 onSaveClick = {
-                    // TODO: Implement save article to datastore
-                }
+                    onSaveArticle(args.article)
+                },
             )
         }
     }

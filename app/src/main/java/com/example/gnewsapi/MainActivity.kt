@@ -44,6 +44,9 @@ class MainActivity : ComponentActivity() {
                     navController = navController,
                     articles = articles,
                     columns = columns,
+                    onSaveArticle = { article ->
+                        newsViewModel.saveArticle(article)
+                    },
                 )
             }
         }
