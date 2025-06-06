@@ -10,6 +10,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import androidx.paging.compose.LazyPagingItems
 import com.example.gnewsapi.model.Article
+import com.example.gnewsapi.ui.screen.components.LoadingOverlay
 import com.example.gnewsapi.ui.screen.fullarticle.FullArticleScreen
 import com.example.gnewsapi.ui.screen.toparticles.TopArticlesScreen
 import kotlin.reflect.typeOf
@@ -20,6 +21,7 @@ fun NavigationHost(
     articles: LazyPagingItems<Article>,
     columns: Int,
     isConnected: Boolean,
+    isLoading: Boolean,
     isSaved: Boolean,
     onCheckIfSaved: (Article) -> Unit,
     onSaveArticle: (Article) -> Unit,
@@ -55,18 +57,23 @@ fun NavigationHost(
         },
     ) {
         composable<TopArticlesRoute> {
-            TopArticlesScreen(
-                articles = articles,
-                columns = columns,
-                isConnected = isConnected,
-                onArticleClick = { article ->
-                    navController.navigate(
-                        route = FullArticleRoute(
-                            article = article,
-                        ),
-                    )
-                }
-            )
+            LoadingOverlay(
+                isLoading = isLoading,
+            ) {
+                TopArticlesScreen(
+                    articles = articles,
+                    columns = columns,
+                    isConnected = isConnected,
+                    noSavedArticles = articles.itemCount == 0,
+                    onArticleClick = { article ->
+                        navController.navigate(
+                            route = FullArticleRoute(
+                                article = article,
+                            ),
+                        )
+                    }
+                )
+            }
         }
         composable<FullArticleRoute>(
             typeMap = mapOf(

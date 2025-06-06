@@ -2,7 +2,6 @@ package com.example.gnewsapi
 
 import android.content.res.Configuration
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -13,6 +12,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.rememberNavController
+import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.room.Room
 import com.example.gnewsapi.data.api.NewsApiService
@@ -40,12 +40,17 @@ class MainActivity : ComponentActivity() {
         ).build()
 
         val repository = NewsRepositoryImpl(newsApiService, newsDatabase.articleDao())
-        val viewModelFactory = NewsViewModelFactory(repository, applicationContext, ConnectivityObserver(applicationContext))
+        val viewModelFactory = NewsViewModelFactory(
+            repository,
+            applicationContext,
+            ConnectivityObserver(applicationContext)
+        )
         newsViewModel = ViewModelProvider(this, viewModelFactory)[NewsViewModel::class.java]
 
         setContent {
             val isConnected by newsViewModel.isConnected.collectAsStateWithLifecycle()
             val articles = newsViewModel.topHeadlinesFlow.collectAsLazyPagingItems()
+            val isLoading = articles.loadState.refresh is LoadState.Loading
             val isArticleSavedState = newsViewModel.isArticleSaved.collectAsState(initial = false)
             val configuration = LocalConfiguration.current
             val columns = when (configuration.orientation) {
@@ -66,13 +71,16 @@ class MainActivity : ComponentActivity() {
                     navController = navController,
                     articles = articles,
                     columns = columns,
+                    isLoading = isLoading,
                     isConnected = isConnected,
                     isSaved = isArticleSavedState.value,
                     onCheckIfSaved = { article ->
-                        newsViewModel.checkIfArticleIsSaved(article)
+//                        newsViewModel.checkIfArticleIsSavedInProtobufDatastore(article)
+                        newsViewModel.checkIfArticleSavedInRoomDB(article)
                     },
                     onSaveArticle = { article ->
-                        newsViewModel.toggleSaveArticle(article)
+                        newsViewModel.toggleSaveArticleUsingProtobufDatastore(article)
+                        newsViewModel.toggleSaveArticleUsingRoom(article)
                     },
                 )
             }

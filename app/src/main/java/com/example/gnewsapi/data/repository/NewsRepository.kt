@@ -5,6 +5,9 @@ import com.example.gnewsapi.model.Article
 
 interface NewsRepository {
 
+    /**
+     * NewsApi operations
+     */
     suspend fun getTopHeadlines(
         country: String = "us",
         category: String? = null,
@@ -15,5 +18,14 @@ interface NewsRepository {
         apiKey: String,
     ): NewsResponse
 
-    suspend fun getCachedArticles(): List<Article>
+    /**
+     * Room database operations
+     */
+    suspend fun getSavedArticles(): List<Article>
+
+    suspend fun saveArticle(article: Article)
+
+    suspend fun deleteArticle(article: Article)
+
+    suspend fun isArticleSaved(url: String): Boolean
 }

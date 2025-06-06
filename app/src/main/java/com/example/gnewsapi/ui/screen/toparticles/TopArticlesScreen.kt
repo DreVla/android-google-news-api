@@ -16,11 +16,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.example.gnewsapi.R
 import com.example.gnewsapi.model.Article
 import com.example.gnewsapi.ui.screen.components.NewsCard
 import kotlinx.coroutines.flow.flowOf
@@ -30,6 +32,7 @@ fun TopArticlesScreen(
     articles: LazyPagingItems<Article>,
     columns: Int,
     isConnected: Boolean,
+    noSavedArticles: Boolean,
     onArticleClick: (Article) -> Unit,
 ) {
     val gridState = rememberLazyGridState()
@@ -42,7 +45,9 @@ fun TopArticlesScreen(
             modifier = Modifier
                 .fillMaxSize(),
         ) { innerPadding ->
-            if (!isConnected) ConnectionStatus()
+            if (!isConnected) NoInternetConnection()
+
+            if (noSavedArticles) NoSavedArticles()
 
             LazyVerticalGrid(
                 columns = GridCells.Fixed(columns),
@@ -67,15 +72,14 @@ fun TopArticlesScreen(
 }
 
 @Composable
-fun ConnectionStatus(
-) {
+fun NoInternetConnection() {
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .background(Color.Red),
     ) {
         Text(
-            text = "No internet connection",
+            text = stringResource(R.string.no_internet_connection),
             modifier = Modifier
                 .align(Alignment.Center),
             color = Color.White,
@@ -83,45 +87,44 @@ fun ConnectionStatus(
     }
 }
 
+@Composable
+fun NoSavedArticles() {
+    Box(
+        modifier = Modifier
+            .fillMaxSize(),
+    ) {
+        Text(
+            text = stringResource(R.string.top_articles_message_no_saved_articles),
+            modifier = Modifier
+                .align(Alignment.Center),
+            style = MaterialTheme.typography.titleLarge,
+            color = MaterialTheme.colorScheme.onBackground,
+        )
+    }
+}
+
 @PreviewLightDark
 @Composable
 fun TopArticlesScreenPreview() {
+    val dummyArticle = Article(
+        sourceName = "test source name",
+        author = "test author",
+        title = stringResource(R.string.lorem_ipsum),
+        description = "test description",
+        url = "test url",
+        urlToImage = "test url to image",
+        content = "test content",
+    )
+    val articles = listOf(dummyArticle, dummyArticle, dummyArticle)
     TopArticlesScreen(
         articles = flowOf(
             PagingData.from(
-                listOf(
-                    Article(
-                        sourceName = "test source name",
-                        author = "test author",
-                        title = "test title",
-                        description = "test description",
-                        url = "test url",
-                        urlToImage = "test url to image",
-                        content = "test content",
-                    ),
-                    Article(
-                        sourceName = "test source name",
-                        author = "test author",
-                        title = "test title",
-                        description = "test description",
-                        url = "test url",
-                        urlToImage = "test url to image",
-                        content = "test content",
-                    ),
-                    Article(
-                        sourceName = "test source name",
-                        author = "test author",
-                        title = "test title",
-                        description = "test description",
-                        url = "test url",
-                        urlToImage = "test url to image",
-                        content = "test content",
-                    ),
-                )
+                articles
             )
         ).collectAsLazyPagingItems(),
         columns = 2,
         isConnected = true,
+        noSavedArticles = false,
         onArticleClick = {},
     )
 }

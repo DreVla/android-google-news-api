@@ -2,7 +2,6 @@ package com.example.gnewsapi.data.repository
 
 import com.example.gnewsapi.data.api.NewsApiService
 import com.example.gnewsapi.data.api.NewsResponse
-import com.example.gnewsapi.data.dto.toDomain
 import com.example.gnewsapi.data.local.ArticleDao
 import com.example.gnewsapi.data.local.toArticle
 import com.example.gnewsapi.data.local.toEntity
@@ -16,6 +15,9 @@ class NewsRepositoryImpl(
     private val articleDao: ArticleDao,
 ) : NewsRepository {
 
+    /**
+     * NewsApi operations.
+     */
     override suspend fun getTopHeadlines(
         country: String,
         category: String?,
@@ -35,17 +37,28 @@ class NewsRepositoryImpl(
             apiKey = apiKey
         )
         if (response.status == "ok") {
-            // cache articles
-            response.articles.forEach {
-                articleDao.insertArticle(it.toDomain().toEntity())
-            }
             return response
         } else {
             throw Exception("Error fetching top headlines: ${response.status}")
         }
     }
 
-    override suspend fun getCachedArticles(): List<Article> {
+    /**
+     * Room database operations.
+     */
+    override suspend fun getSavedArticles(): List<Article> {
         return articleDao.getAllArticles().map { it.toArticle() }
+    }
+
+    override suspend fun saveArticle(article: Article) {
+        articleDao.insertArticle(article.toEntity())
+    }
+
+    override suspend fun deleteArticle(article: Article) {
+        articleDao.deleteArticle(article.url)
+    }
+
+    override suspend fun isArticleSaved(url: String): Boolean {
+        return articleDao.isArticleSaved(url)
     }
 }
