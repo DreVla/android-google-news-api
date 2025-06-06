@@ -11,3 +11,7 @@ message ProtobufArticle {
     string url_to_image = 6;
     string content = 7;
 }
+
+message ProtobufSavedArticles {
+    repeated ProtobufArticle articles = 1;
+}

@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     kotlin("plugin.serialization")
     id("com.google.protobuf")
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -102,6 +103,12 @@ dependencies {
 
     // Protobuff
     implementation(libs.protobuf.javalite)
+
+    // Saving articles offline
+    implementation(libs.androidx.datastore)
+    implementation(libs.androidx.datastore.core)
+    implementation(libs.androidx.room.runtime)
+    ksp(libs.androidx.room.compiler)
 }
 
 /**

@@ -1,6 +1,6 @@
 package com.example.gnewsapi.ui.screen.fullarticle
 
-import androidx.activity.compose.BackHandler
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -33,6 +33,7 @@ import com.example.gnewsapi.model.Article
 @Composable
 fun FullArticleScreen(
     article: Article,
+    isSaved: Boolean,
     onBackClick: () -> Unit,
     onSaveClick: () -> Unit,
 ) {
@@ -64,7 +65,12 @@ fun FullArticleScreen(
                         .clickable {
                             onSaveClick()
                         },
-                    painter = painterResource(id = R.drawable.outline_bookmark_add_24),
+                    painter = painterResource(
+                        id = if (isSaved)
+                            R.drawable.baseline_bookmark_remove_24
+                        else
+                            R.drawable.outline_bookmark_add_24
+                    ),
                     contentDescription = stringResource(R.string.full_article_save_button_content_description),
                     tint = MaterialTheme.colorScheme.primary,
                 )
@@ -134,6 +140,7 @@ fun FullArticleScreenPreview() {
             urlToImage = "urlToImage",
             content = stringResource(R.string.lorem_ipsum),
         ),
+        isSaved = true,
         onBackClick = {},
         onSaveClick = {},
     )

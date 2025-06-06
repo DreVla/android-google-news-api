@@ -3,8 +3,9 @@ accompanistSystemuicontroller = "0.27.0"
 agp = "8.10.0"
 coilCompose = "3.2.0"
 coilNetworkOkhttp = "3.2.0"
+datastore = "1.1.7"
 gson = "2.13.1"
-kotlin = "2.0.21"
+kotlin = "2.1.20"
 coreKtx = "1.16.0"
 junit = "4.13.2"
 junitVersion = "1.2.1"
@@ -18,14 +19,19 @@ pagingRuntimeKtx = "3.3.6"
 protobufJavalite = "3.25.5"
 retrofit = "3.0.0"
 converterGson = "2.9.0"
+roomRuntime = "2.7.1"
 runtimeLivedata = "1.8.2"
 
 [libraries]
 accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanistSystemuicontroller" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-datastore = { module = "androidx.datastore:datastore", version.ref = "datastore" }
+androidx-datastore-core = { module = "androidx.datastore:datastore-core", version.ref = "datastore" }
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
 androidx-paging-compose = { module = "androidx.paging:paging-compose", version.ref = "pagingRuntimeKtx" }
 androidx-paging-runtime-ktx = { module = "androidx.paging:paging-runtime-ktx", version.ref = "pagingRuntimeKtx" }
+androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomRuntime" }
+androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomRuntime" }
 coil-network-okhttp = { module = "io.coil-kt.coil3:coil-network-okhttp", version.ref = "coilNetworkOkhttp" }
 coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coilCompose" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }

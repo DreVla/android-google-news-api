@@ -3,6 +3,7 @@ package com.example.gnewsapi.ui.navigation
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -18,6 +19,9 @@ fun NavigationHost(
     navController: NavHostController,
     articles: LazyPagingItems<Article>,
     columns: Int,
+    isConnected: Boolean,
+    isSaved: Boolean,
+    onCheckIfSaved: (Article) -> Unit,
     onSaveArticle: (Article) -> Unit,
 ) {
     NavHost(
@@ -54,6 +58,7 @@ fun NavigationHost(
             TopArticlesScreen(
                 articles = articles,
                 columns = columns,
+                isConnected = isConnected,
                 onArticleClick = { article ->
                     navController.navigate(
                         route = FullArticleRoute(
@@ -69,8 +74,14 @@ fun NavigationHost(
             ),
         ) {
             val args = it.toRoute<FullArticleRoute>()
+
+            LaunchedEffect(args.article) {
+                onCheckIfSaved(args.article)
+            }
+
             FullArticleScreen(
                 article = args.article,
+                isSaved = isSaved,
                 onBackClick = {
                     navController.popBackStack()
                 },

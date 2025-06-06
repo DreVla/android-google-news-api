@@ -38,7 +38,6 @@ class TopHeadlinesPagingSource(
      */
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Article> {
         val page = params.key ?: STARTING_PAGE_INDEX
-        Log.d("drevla: ", "load: ${params.loadSize}")
         return try {
             val response = newsRepository.getTopHeadlines(
                 page = page,
