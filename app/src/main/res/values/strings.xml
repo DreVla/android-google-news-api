@@ -15,4 +15,5 @@
     <string name="toast_article_saved_room_db">Article saved in Room DB</string>
     <string name="toast_article_saved_protobuff_datastore">Article saved in Protobuff DataStore</string>
     <string name="top_articles_message_no_saved_articles">No saved articles</string>
+    <string name="read_full_article">Read full article</string>
 </resources>
