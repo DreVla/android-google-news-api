@@ -1,6 +1,6 @@
 # Android News App
 
-A modern Android application that displays top headlines using the News API. The app features offline support for saved articles, efficient pagination, and a clean, responsive UI built with Jetpack Compose.
+A modern Android application that displays top headlines using the News API (https://newsapi.org/). The app features offline support for saved articles, efficient pagination, and a clean, responsive UI built with Jetpack Compose.
 
 https://github.com/user-attachments/assets/108fb90f-2d06-4273-8bd9-d9975d975cf2
 ## Setup
