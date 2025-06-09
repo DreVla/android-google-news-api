@@ -19,13 +19,13 @@ class NewsRepositoryImpl(
      * NewsApi operations.
      */
     override suspend fun getTopHeadlines(
+        apiKey: String,
         country: String,
         category: String?,
         sources: String?,
         query: String?,
         pageSize: Int,
         page: Int,
-        apiKey: String,
     ): NewsResponse {
         val response = newsApiService.getTopHeadlines(
             country = country,
@@ -34,7 +34,42 @@ class NewsRepositoryImpl(
             query = query,
             pageSize = pageSize,
             page = page,
-            apiKey = apiKey
+            apiKey = apiKey,
+        )
+        if (response.status == "ok") {
+            return response
+        } else {
+            throw Exception("Error fetching top headlines: ${response.status}")
+        }
+    }
+
+    override suspend fun getEverything(
+        apiKey: String,
+        query: String,
+        searchIn: String?,
+        sources: String?,
+        domains: String?,
+        excludeDomains: String?,
+        from: String?,
+        to: String?,
+        language: String?,
+        sortBy: String?,
+        pageSize: Int,
+        page: Int,
+    ): NewsResponse {
+        val response = newsApiService.getEverything(
+            apiKey = apiKey,
+            query = query,
+            searchIn = searchIn,
+            sources = sources,
+            domains = domains,
+            excludeDomains = excludeDomains,
+            from = from,
+            to = to,
+            language = language,
+            sortBy = sortBy,
+            pageSize = pageSize,
+            page = page,
         )
         if (response.status == "ok") {
             return response
