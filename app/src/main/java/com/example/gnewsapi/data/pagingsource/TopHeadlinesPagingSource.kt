@@ -1,6 +1,5 @@
 package com.example.gnewsapi.data.pagingsource
 
-import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.example.gnewsapi.BuildConfig
@@ -78,12 +77,9 @@ class TopHeadlinesPagingSource(
 
     /**
      * Fetch articles from local cache, in our case the Room database.
-     *
-     * @param page Page to fetch
      */
     private suspend fun getSavedArticles(): LoadResult.Page<Int, Article> {
         val articles = newsRepository.getSavedArticles()
-        Log.d("TopHeadlinesPagingSource", "getSavedArticles: $articles")
         return LoadResult.Page(
             data = articles,
             prevKey = null,
