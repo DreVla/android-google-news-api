@@ -1,6 +1,5 @@
 package com.example.gnewsapi.ui.screen.fullarticle
 
-import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -12,6 +11,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
@@ -20,6 +20,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -29,6 +30,8 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.SubcomposeAsyncImage
 import com.example.gnewsapi.R
 import com.example.gnewsapi.model.Article
+import com.example.gnewsapi.ui.screen.components.EasterEgg
+import com.example.gnewsapi.ui.screen.components.LinkText
 
 @Composable
 fun FullArticleScreen(
@@ -55,7 +58,7 @@ fun FullArticleScreen(
                         .clickable {
                             onBackClick()
                         },
-                    imageVector = androidx.compose.material.icons.Icons.AutoMirrored.Filled.ArrowBack,
+                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                     contentDescription = stringResource(R.string.full_article_back_button_content_description),
                     tint = MaterialTheme.colorScheme.primary,
                 )
@@ -81,7 +84,7 @@ fun FullArticleScreen(
                     .height(256.dp),
                 model = article.urlToImage,
                 contentDescription = stringResource(R.string.full_article_image_button_content_description),
-                contentScale = androidx.compose.ui.layout.ContentScale.Crop,
+                contentScale = ContentScale.Crop,
                 loading = {
                     CircularProgressIndicator()
                 }
@@ -97,17 +100,20 @@ fun FullArticleScreen(
             )
 
             Text(
-                modifier = Modifier.padding(start = 16.dp, top = 8.dp, end = 16.dp),
+                modifier = Modifier
+                    .padding(start = 16.dp, top = 8.dp, end = 16.dp),
                 text = article.description,
                 style = MaterialTheme.typography.bodyMedium,
             )
 
             Spacer(
-                modifier = Modifier.height(4.dp),
+                modifier = Modifier
+                    .height(4.dp),
             )
 
             Text(
-                modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 8.dp),
+                modifier = Modifier
+                    .padding(start = 16.dp, end = 16.dp, top = 8.dp),
                 text = "By ${article.author}",
                 style = MaterialTheme.typography.bodySmall,
                 maxLines = 1,
@@ -115,14 +121,19 @@ fun FullArticleScreen(
             )
 
             Text(
-                modifier = Modifier.padding(horizontal = 16.dp),
+                modifier = Modifier
+                    .padding(horizontal = 16.dp),
                 text = article.sourceName,
                 style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.primary,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
             )
+
+            LinkText(article.url)
         }
+
+        EasterEgg()
     }
 }
 

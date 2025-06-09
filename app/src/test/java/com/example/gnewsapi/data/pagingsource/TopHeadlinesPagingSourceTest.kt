@@ -111,7 +111,7 @@ class TopHeadlinesPagingSourceTest {
             nextKey = 2,
         )
         coEvery {
-            newsRepository.getTopHeadlines(
+            newsRepository.getEverything(
                 page = FIRST_PAGE,
                 pageSize = PAGE_SIZE,
                 apiKey = BuildConfig.NEWS_API_KEY

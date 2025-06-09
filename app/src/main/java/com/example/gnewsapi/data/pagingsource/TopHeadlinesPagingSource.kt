@@ -58,12 +58,12 @@ class TopHeadlinesPagingSource(
      */
     private suspend fun fetchRemoteArticles(
         page: Int,
-        params: LoadParams<Int>
+        params: LoadParams<Int>,
     ): LoadResult.Page<Int, Article> {
-        val response = newsRepository.getTopHeadlines(
+        val response = newsRepository.getEverything(
+            apiKey = BuildConfig.NEWS_API_KEY,
             page = page,
             pageSize = params.loadSize,
-            apiKey = BuildConfig.NEWS_API_KEY
         )
 
         val articles = response.articles.map { articleDTO -> articleDTO.toDomain() }

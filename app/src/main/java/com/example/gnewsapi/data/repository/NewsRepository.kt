@@ -9,14 +9,30 @@ interface NewsRepository {
      * NewsApi operations
      */
     suspend fun getTopHeadlines(
+        apiKey: String,
         country: String = "us",
         category: String? = null,
         sources: String? = null,
         query: String? = null,
         pageSize: Int = 21,
         page: Int = 0,
-        apiKey: String,
     ): NewsResponse
+
+    suspend fun getEverything(
+        apiKey: String,
+        query: String = "sport", // hardcoded sport here just to test the api
+        searchIn: String? = null,
+        sources: String? = null,
+        domains: String? = null,
+        excludeDomains: String? = null,
+        from: String? = null,
+        to: String? = null,
+        language: String? = null,
+        sortBy: String? = null,
+        pageSize: Int = 21,
+        page: Int = 0,
+    ): NewsResponse
+
 
     /**
      * Room database operations

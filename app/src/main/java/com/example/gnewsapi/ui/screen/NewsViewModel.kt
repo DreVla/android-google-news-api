@@ -167,9 +167,9 @@ class NewsViewModel(
 
                 _saveEvent.emit(
                     if (articleExists)
-                        context.getString(R.string.toast_article_removed_from_saved)
+                        context.getString(R.string.toast_article_removed_from_saved_protobuff_datastore)
                     else
-                        context.getString(R.string.toast_article_saved)
+                        context.getString(R.string.toast_article_saved_protobuff_datastore)
                 )
 
                 updatedArticles.all {
@@ -203,9 +203,9 @@ class NewsViewModel(
 
             _saveEvent.emit(
                 if (articleExists)
-                    context.getString(R.string.toast_article_removed_from_saved)
+                    context.getString(R.string.toast_article_removed_from_saved_room_db)
                 else
-                    context.getString(R.string.toast_article_saved)
+                    context.getString(R.string.toast_article_saved_room_db)
             )
         }
     }
